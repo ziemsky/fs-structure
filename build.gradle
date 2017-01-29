@@ -1,0 +1,169 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+}
+
+plugins {
+    id 'groovy'
+    id 'maven'
+    id 'maven-publish'
+}
+
+group 'com.ziemsky.fsstructure'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+subprojects {
+    version = rootProject.version
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    testUtils // common test resources used by all other test sourceSets
+
+    test {
+        compileClasspath += sourceSets.testUtils.output.classesDirs \
+                            + configurations.testUtilsRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+
+    integration {
+        groovy {
+            srcDirs 'src/integration/groovy'
+        }
+        resources {
+            srcDirs 'src/integration/resources'
+        }
+        compileClasspath += sourceSets.main.output.classesDirs \
+                            + sourceSets.testUtils.output.classesDirs \
+                            + sourceSets.test.output.classesDirs \
+                            + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+
+    functional {
+        groovy {
+            srcDirs 'src/functional/groovy'
+        }
+        resources {
+            srcDirs 'src/functional/resources'
+        }
+        compileClasspath += sourceSets.test.output.classesDirs \
+                            + sourceSets.testUtils.output.classesDirs \
+                            + configurations.testRuntime \
+                            + sourceSets.integration.output.classesDirs \
+                            + configurations.integrationRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+dependencies {
+    compile('commons-io:commons-io:2.5')
+    compile('org.apache.commons:commons-lang3:3.5')
+    compile('org.codehaus.groovy:groovy-all:2.4.12')
+
+    testUtilsCompile('org.codehaus.groovy:groovy-all:2.4.12')
+
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-3') {
+        exclude module: 'groovy-all'
+    }
+    testCompile('cglib:cglib-nodep:3.2.4')            // needed by Spock to mock ctors and suchlike
+    testCompile('org.objenesis:objenesis:2.5.1')      // enables mocking ctors without providing args (e.g. File)
+     // testCompile('net.bytebuddy:byte-buddy:1.6.7') // <- couldn't mock File with no ctor args, cglib worked
+
+    integrationCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-3') {
+        exclude module: 'groovy-all'
+    }
+    integrationCompile sourceSets.main.output
+
+    functionalCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-3') {
+        exclude module: 'groovy-all'
+    }
+    functionalCompile sourceSets.main.output
+}
+
+
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+}
+
+task functionalTest(type: Test) {
+    testClassesDirs = sourceSets.functional.output.classesDirs
+    classpath = sourceSets.functional.runtimeClasspath
+}
+
+integrationTest.mustRunAfter(test)
+functionalTest.mustRunAfter(test, integrationTest)
+check.dependsOn(test, integrationTest, functionalTest)
+
+
+defaultTasks 'keyTasks'
+
+task keyTasks {
+
+    group 'help'
+
+    description 'Prints out the most often used tasks in daily development and other basic build info.'
+
+    doLast {
+        logger.quiet('''
+============================================================================
+
+    Project: {}
+    
+             {}
+
+Key tasks:
+
+    check               - Runs all tests - unit, integration, and acceptance.
+    test                - Runs unit tests.
+    integrationTest     - Runs integration tests.
+    functionalTest      - Runs acceptance tests.
+    
+    publishToMavenLocal - Packages and publishes the plugin to local Maven repository. 
+    
+    tasks               - All tasks available in this build.
+    help                - Gradle help.
+
+    To execute any of the above TASKs, navigate to the root directory of this project and execute:
+
+                   ./gradlew TASK
+
+    To attach debugger to running tests, add '-Dtest.debug' when executing a test task and connect debugger
+    to port 5005 - Gradle will pause execution of tests until you connect.
+    
+    See readme.md for more details.
+
+============================================================================
+''',
+                project.name,
+                project.description ? project.description : ""
+        )
+    }
+}
+keyTasks.dependsOn help
+
+publishing {
+    publications {
+        pluginPublication (MavenPublication) {
+            from        components.java
+
+            groupId     project.group
+            artifactId  'fs-structure'
+            version     project.version
+        }
+    }
+}
+
+tag {
+    message {
+        "version: ${project.version}"
+    }
+}

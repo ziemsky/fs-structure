@@ -1,0 +1,13 @@
+
+tagPrefix = 'v'
+
+preRelease {
+
+    startingVersion = '1'
+
+    pattern = /\d+/
+
+    bump = {
+        "${(it as int) + 1}"
+    }
+}
