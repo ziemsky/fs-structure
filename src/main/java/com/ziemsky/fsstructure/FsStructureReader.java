@@ -110,7 +110,7 @@ public class FsStructureReader {
             final String name = fsItemPrototype.getName();
 
             if (fsItemPrototype instanceof FsFilePrototype) {
-                return FsStructure.file(name, ((FsFilePrototype)fsItemPrototype).getContent());
+                return FsStructure.fle(name, ((FsFilePrototype)fsItemPrototype).getContent());
             } else {
                 return FsStructure.dir(name, toFsItems(((FsDirPrototype)fsItemPrototype).getContent()));
             }

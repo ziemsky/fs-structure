@@ -55,15 +55,15 @@ public class FsStructure {
         return this;
     }
 
-    public static FsFile file(final String name) {
-        return file(name, ("default content of file " + name).getBytes());
+    public static FsFile fle(final String name) {
+        return fle(name, ("default content of file " + name).getBytes());
     }
 
-    public static FsFile file(final String name, final String content) {
+    public static FsFile fle(final String name, final String content) {
         return new FsFile(name, toByteArray(content));
     }
 
-    public static FsFile file(final String name, final byte[] content) {
+    public static FsFile fle(final String name, final byte[] content) {
         return new FsFile(name, content);
     }
 
