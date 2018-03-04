@@ -9,6 +9,7 @@ plugins {
     id 'groovy'
     id 'maven'
     id 'maven-publish'
+    id 'jacoco'
 }
 
 group 'com.ziemsky.fsstructure'
@@ -165,5 +166,15 @@ publishing {
 tag {
     message {
         "version: ${project.version}"
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.0
+            }
+        }
     }
 }

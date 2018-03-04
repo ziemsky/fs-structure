@@ -33,7 +33,7 @@ public class FsStructureReader {
 
                 final String fileName = path.getFileName().toString();
 
-                FsItemPrototype lastFsItem = null;
+                FsItemPrototype lastFsItem;
                 try {
                     lastFsItem = Files.isRegularFile(path)
                         ? new FsFilePrototype(fileName, Files.readAllBytes(path))

@@ -22,8 +22,7 @@ public class FsStructure {
 
     private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String INDENT = "  ";
-
-    public static final Charset CHARSET = Charset.forName("UTF-8");
+    private static final Charset CHARSET = Charset.forName("UTF-8");
 
     private final List<FsItem> fsItems = new ArrayList<>();
     private final FsStructureWriter fsStructureWriter = new FsStructureWriter();
