@@ -10,6 +10,7 @@ plugins {
     id 'maven'
     id 'maven-publish'
     id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.3.0'
 }
 
 group 'com.ziemsky.fsstructure'
@@ -177,4 +178,9 @@ jacocoTestCoverageVerification {
             }
         }
     }
+}
+
+pitest {
+    mutationThreshold = 0
+    outputFormats = ['HTML']
 }
