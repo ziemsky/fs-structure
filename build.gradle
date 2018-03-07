@@ -181,6 +181,7 @@ jacocoTestCoverageVerification {
 }
 
 pitest {
-    mutationThreshold = 0
+    coverageThreshold = 5
+    mutationThreshold = 4
     outputFormats = ['HTML']
 }
