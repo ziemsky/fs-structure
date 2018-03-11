@@ -17,19 +17,19 @@ import static com.ziemsky.fsstructure.FsStructure.*
 ...
 
 Path testDir;
-
+...
 FsStructure fsStructure =
         create(
-                file('topLevelFile'),
+                fle('topLevelFile'),
 
                 dir('topLevelDir.empty'),
 
                 dir('topLevelDir.withContent',
                         dir('nestedDir.empty'),
                         dir('nestedDir.withContent',
-                                file('nestedFile.level2'),
+                                fle('nestedFile.level2'),
                         ),
-                        file('nestedFile.level1'),
+                        fle('nestedFile.level1'),
                 )
         ).saveIn(testDir)
 ... 
@@ -59,11 +59,14 @@ This project follows [Semantic Versioning][semver] specification.
 
 ## Status
 NOTE: THIS PROJECT IS A WORK IN PROGRESS AND IS IN VERY EARLY STAGE OF DEVELOPMENT - NOT READY FOR ACTUAL USE, YET.
+
+## Development
+* [Testing Strategy]
  
 ## Licence
 All source code in this repository is licenced to use as specified in [MIT licence][mit licence].
 
-The summary of the intention for allowed use of the code from this repository: 
+Summary of the intention for allowed use of the code from this repository: 
 * Feel free to use it in any form (source code or binary) and for any purpose (personal use or commercial).
 * Feel free to use entire files or snippets of the code with or without modifications or simply use it as examples to
   inspire your own solutions.
@@ -84,3 +87,5 @@ For more details of this licence see:
 [opensource.org]:               https://opensource.org
 
 [semver]:                       https://semver.org/spec/v2.0.0.html
+
+[Testing Strategy]:             testing.md
