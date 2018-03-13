@@ -42,8 +42,8 @@ under test with third-party constructs.
 ### Unit Tests
 Tests focusing on individual classes whose dependencies and collaborators are easy/ok to mock.
 
-## Automated Test Quality Assurances
-Coverage and mutation checks: initial assumption is to strive for 100% level of both but calculated cumulatively across
+## Automated Test Quality Assurance
+Coverage and mutation checks: initial goal is to strive for 100% level of both but calculated cumulatively across
 all types of checks. This means that it is acceptable for, say, unit tests not to satisfy 100% coverage on their own
 because the rest will be satisfied by other tests.
 

@@ -3,14 +3,14 @@ package com.ziemsky.fsstructure
 import spock.lang.Specification
 
 import static com.ziemsky.fsstructure.test.util.TestDataProvider.newFileContent
-import static com.ziemsky.fsstructure.test.util.TestDataProvider.newFileName
+import static com.ziemsky.fsstructure.test.util.TestDataProvider.newFsItemName
 
 class FsFileTest extends Specification {
 
     def "constructor initialises all fields"() {
 
         given:
-            final String expectedFileName = newFileName()
+            final String expectedFileName = newFsItemName()
             final byte[] expectedFileContent = newFileContent()
 
         when:
@@ -26,7 +26,7 @@ class FsFileTest extends Specification {
     def "toString includes file name and type"() {
 
         given:
-            final String expectedFileName = newFileName()
+            final String expectedFileName = newFsItemName()
             final byte[] expectedFileContent = newFileContent()
 
         when:

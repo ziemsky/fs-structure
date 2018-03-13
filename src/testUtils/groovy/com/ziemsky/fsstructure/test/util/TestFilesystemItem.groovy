@@ -1,4 +1,4 @@
-package com.ziemsky.fsstructure
+package com.ziemsky.fsstructure.test.util
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -6,8 +6,8 @@ import java.nio.file.Paths
 import java.util.function.Consumer
 import java.util.function.Function
 
-import static com.ziemsky.fsstructure.TestFilesystemItem.Type.DIR
-import static com.ziemsky.fsstructure.TestFilesystemItem.Type.FILE
+import static com.ziemsky.fsstructure.test.util.TestFilesystemItem.Type.DIR
+import static com.ziemsky.fsstructure.test.util.TestFilesystemItem.Type.FILE
 
 class TestFilesystemItem {
 
