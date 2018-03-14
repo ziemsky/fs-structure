@@ -28,6 +28,7 @@ public class FsDir implements FsItem {
 
     @Override public String toString() {
         return "FsDir{" +
+
             "name='" + name + '\'' +
             '}';
     }

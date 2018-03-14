@@ -21,8 +21,12 @@ class TestDataProvider {
         return randomString() + "." + randomString()
     }
 
-    static String newFileContent() {
+    static byte[] newFileContent() {
         return randomByteArray()
+    }
+
+    static RuntimeException newRuntimeException() {
+        return new RuntimeException(randomString())
     }
 
     List<TestFilesystemItem> newReferenceTestFileSystemItems() {

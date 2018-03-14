@@ -3,16 +3,22 @@ package com.ziemsky.fsstructure;
 import java.nio.file.Path;
 import java.util.List;
 
-class FsStructureWriter {
+public class FsStructureWriter {
 
-    void write(final List<FsItem> fileSystemItems, final Path dir) {
+    private final FsTools fsTools;
+
+    FsStructureWriter(final FsTools fsTools) {
+        this.fsTools = fsTools;
+    }
+
+    public void write(final List<FsItem> fileSystemItems, final Path dir) {
         fileSystemItems.forEach(fsItem -> getWriterFor(fsItem).saveIn(dir));
     }
 
     private FsItemWriter getWriterFor(final FsItem fsItem) {
 
         return fsItem instanceof FsFile
-            ? new FileWriter((FsFile) fsItem)
-            : new DirWriter((FsDir) fsItem, this);
+            ? new FsFileWriter((FsFile) fsItem, fsTools)
+            : new FsDirWriter((FsDir) fsItem, this, fsTools);
     }
 }

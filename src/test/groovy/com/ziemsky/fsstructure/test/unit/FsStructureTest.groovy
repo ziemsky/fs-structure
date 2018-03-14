@@ -1,12 +1,13 @@
-package com.ziemsky.fsstructure
+package com.ziemsky.fsstructure.test.unit
 
+import com.ziemsky.fsstructure.FsStructure
 import spock.lang.Specification
 
 import static com.ziemsky.fsstructure.FsStructure.create
 
-class FsStructureUnitSpec extends Specification {
+class FsStructureTest extends Specification {
 
-    // FsStructure.create is being tested in functional tests
+    // Primary version of FsStructure.create is being tested in functional tests
     // what about overloads, though?
 
     def "creates new file item with default content"() {}
@@ -22,7 +23,7 @@ class FsStructureUnitSpec extends Specification {
             final FsStructure actualFsStructure = FsStructure.create()
 
         then:
-            actualFsStructure.toString() == ""
+            actualFsStructure.toString() == "\n\n"
     }
 
 }

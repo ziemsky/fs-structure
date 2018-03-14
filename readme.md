@@ -64,7 +64,7 @@ NOTE: THIS PROJECT IS A WORK IN PROGRESS AND IS IN VERY EARLY STAGE OF DEVELOPME
 * [Testing Strategy]
  
 ## Licence
-All source code in this repository is licenced to use as specified in [MIT licence][mit licence].
+Entire source code in this repository is licenced to use as specified in [MIT licence][mit licence].
 
 Summary of the intention for allowed use of the code from this repository: 
 * Feel free to use it in any form (source code or binary) and for any purpose (personal use or commercial).

@@ -8,7 +8,7 @@ class RandomUtils {
         return UUID.randomUUID().toString()
     }
 
-    static String randomByteArray() {
-        return randomString().getBytes(StandardCharsets.UTF_8)
+    static byte[] randomByteArray() {
+        return randomString().getBytes(StandardCharsets.UTF_8) // todo proper, raw, full-value-set byte array
     }
 }

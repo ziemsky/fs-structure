@@ -1,5 +1,6 @@
-package com.ziemsky.fsstructure
+package com.ziemsky.fsstructure.test.functional
 
+import com.ziemsky.fsstructure.FsStructure
 import com.ziemsky.fsstructure.test.util.TestDataProvider
 import com.ziemsky.fsstructure.test.util.TestFilesystemItem
 import org.junit.Rule
@@ -10,7 +11,7 @@ import java.nio.file.Path
 
 import static com.ziemsky.fsstructure.FsStructure.readFrom
 
-class FsStructureFunctionalSpec extends Specification {
+class FsStructureTest extends Specification {
 
     @Rule
     final TemporaryFolder tempDir = new TemporaryFolder()
@@ -72,8 +73,9 @@ class FsStructureFunctionalSpec extends Specification {
             final FsStructure actualFsStructureReadFromDisk = readFrom(testDir)
 
         then: "the items read from disk have expected structure"
-            actualFsStructureReadFromDisk.toString() ==
-                    '''dirLevel1_content.extension/
+            actualFsStructureReadFromDisk.toString() == \
+                    '''
+                      |dirLevel1_content.extension/
                       |  dirLevel2_content.extension/
                       |    dirLevel3_noContent.extension/
                       |    dirLevel3_noContent_noExtension/
@@ -106,7 +108,8 @@ class FsStructureFunctionalSpec extends Specification {
                       |dirLevel1_noContent.extension/
                       |dirLevel1_noContent_noExtension/
                       |fleLevel1.extension: 
-                      |fleLevel1_noExtension: '''
+                      |fleLevel1_noExtension: 
+                      |'''
                             .stripMargin()
     }
 

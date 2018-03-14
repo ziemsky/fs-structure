@@ -1,8 +1,5 @@
 package com.ziemsky.fsstructure;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -15,8 +12,11 @@ public class FsStructureReader {
     private static final String ROOT_DIR_PROTOTYPE_NAME = "/";
     private final List<Path> paths = new ArrayList<>();
 
-    FsStructureReader(final List<Path> paths) {
+    private FsTools fsTools;
+
+    FsStructureReader(final List<Path> paths, final FsTools fsTools) {
         this.paths.addAll(Optional.ofNullable(paths).orElse(emptyList()));
+        this.fsTools = fsTools;
     }
 
     public FsStructure inContextOf(final Path contextDir) {
@@ -28,19 +28,15 @@ public class FsStructureReader {
         //     for files create FsFile with appropriate parent
         //     for dirs create FsDir with appropriate parent
 
-        Stream<Stream<FsItemPrototype>> linesStream = paths.stream()
+        final Stream<Stream<FsItemPrototype>> linesStream = paths.stream()
             .map(path -> {
 
                 final String fileName = path.getFileName().toString();
 
                 FsItemPrototype lastFsItem;
-                try {
-                    lastFsItem = Files.isRegularFile(path)
-                        ? new FsFilePrototype(fileName, Files.readAllBytes(path))
+                    lastFsItem = fsTools.isRegularFile(path)
+                        ? new FsFilePrototype(fileName, fsTools.readAllBytes(path))
                         : new FsDirPrototype(fileName);
-                } catch (final IOException e) {
-                    throw new UncheckedIOException(e);
-                }
 
                 Stream<FsItemPrototype> fsItemsStream = Stream.of(lastFsItem);
 
@@ -61,7 +57,7 @@ public class FsStructureReader {
 
         // Paths in 'paths' actually share the same contextDir, so when the above produces
         // list of paths built out of FsItems, where each FsDir only ever contains single
-        // FsItem, there will be duplicates, for example:
+        // FsItem, there will be duplicates among the directories, for example:
 
         // [0]: FsDirA / FsDirB / FsFileA
         // [1]: FsDirA / FsDirB / FsFileB
@@ -85,7 +81,7 @@ public class FsStructureReader {
 //        fsItemStream.collect(
 //            FsStructurePrototype::new,
 //            FsStructurePrototype::add,
-//            (left, right) -> { /* no-op - no combiner required in serial stream */ }
+//            (left, right) -> { /* no-op - no combiner required in a serial stream */ }
 //        );
 
         final FsDirPrototype rootDirPrototype = new FsDirPrototype(ROOT_DIR_PROTOTYPE_NAME);
@@ -100,7 +96,6 @@ public class FsStructureReader {
                 currentDirPrototypeRef.set(currentDirPrototype.addAndGet(fsItemPrototype));
             });
         });
-
 
         return FsStructure.create(toFsItems(rootDirPrototype.getContent()));
     }
@@ -174,11 +169,6 @@ public class FsStructureReader {
 
             return prototype instanceof FsDirPrototype ? (FsDirPrototype) prototype : null;
         }
-    }
-
-    private List<Path> getAncestryUpTo(final Path path, final Path contextDir) {
-        if (true) throw new UnsupportedOperationException("Not implemented, yet.");
-        return null;
     }
 
 }

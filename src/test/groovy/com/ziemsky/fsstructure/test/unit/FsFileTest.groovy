@@ -1,5 +1,6 @@
-package com.ziemsky.fsstructure
+package com.ziemsky.fsstructure.test.unit
 
+import com.ziemsky.fsstructure.FsFile
 import spock.lang.Specification
 
 import static com.ziemsky.fsstructure.test.util.TestDataProvider.newFileContent

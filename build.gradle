@@ -67,6 +67,8 @@ dependencies {
         exclude module: 'groovy-all'
     }
     testCompile('org.apache.commons:commons-lang3:3.5')
+    testRuntime('net.bytebuddy:byte-buddy:1.8.0')
+    testRuntime('org.objenesis:objenesis:2.6')
 
     integrationCompile sourceSets.main.output
     integrationCompile sourceSets.testUtils.output
@@ -98,7 +100,8 @@ integrationTest.mustRunAfter(test)
 functionalTest.mustRunAfter(test, integrationTest)
 check.dependsOn(test, integrationTest, functionalTest, jacocoTestCoverageVerification, 'pitest')
 jacocoTestCoverageVerification.mustRunAfter tasks.findAll { it.name.toLowerCase().endsWith('test') && !it.name.toLowerCase().equalsIgnoreCase('pitest')}
-tasks.find({it.name == 'pitest'}).mustRunAfter jacocoTestCoverageVerification
+tasks.getByName('pitest').mustRunAfter jacocoTestCoverageVerification
+jacocoTestCoverageVerification.dependsOn(jacocoTestReport)
 
 
 defaultTasks 'keyTasks'
@@ -147,6 +150,10 @@ task keyTasks {
 }
 keyTasks.dependsOn help
 
+//
+// Releasing
+//
+
 publishing {
     publications {
         pluginPublication (MavenPublication) {
@@ -165,18 +172,87 @@ tag {
     }
 }
 
+//
+// JaCoCo - code coverage
+//
+
 jacocoTestCoverageVerification {
     violationRules {
+        // See http://www.jacoco.org/jacoco/trunk/doc/ant.html
+        //     https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html
+        //     http://www.jacoco.org/jacoco/trunk/doc/counters.html
+
         rule {
+            includes = ['com.ziemsky.fsstructure.*']
+            excludes = ['*__spock_*', 'com.ziemsky.fsstructure.test.*']
+
+            element = 'CLASS'
+
             limit {
-                minimum = 0.0
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 1.00
+            }
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 1.00
+            }
+        }
+
+        rule {
+            // No more than 5 logical paths through a method -> no more than 5 tests required to test the method
+            // See http://www.jacoco.org/jacoco/trunk/doc/counters.html
+
+            includes = ['com.ziemsky.fsstructure.*']
+            excludes = ['*__spock_*', 'com.ziemsky.fsstructure.test.*']
+
+            element = 'METHOD'
+
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'TOTALCOUNT'
+                maximum = 5
             }
         }
     }
 }
 
+test {
+    jacoco {
+        includes = ['com.ziemsky.fsstructure.*']
+        excludes = ['*__spock_*', 'com.ziemsky.fsstructure.test.*']
+
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+}
+
+integrationTest {
+    jacoco {
+        includes = ['com.ziemsky.fsstructure.*']
+        excludes = ['*__spock_*', 'com.ziemsky.fsstructure.test.*']
+
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+}
+
+functionalTest {
+    jacoco {
+        includes = ['com.ziemsky.fsstructure.*']
+        excludes = ['*__spock_*', 'com.ziemsky.fsstructure.test.*']
+
+        destinationFile = file("$buildDir/jacoco/jacoco.exec")
+    }
+}
+
+//
+// PIT test (mutation checks)
+//
+
 pitest {
-    coverageThreshold = 5
-    mutationThreshold = 4
+    coverageThreshold = 100
+    mutationThreshold = 100
     outputFormats = ['HTML']
+    testSourceSets = [sourceSets.test, sourceSets.integration, sourceSets.functional]
 }
