@@ -1,5 +1,9 @@
 package com.ziemsky.fsstructure;
 
+import com.ziemsky.fsstructure.walker.FsDirVisitor;
+import com.ziemsky.fsstructure.walker.FsFileVisitor;
+import com.ziemsky.fsstructure.walker.FsStructureWalker;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
@@ -102,6 +106,10 @@ public class FsStructure {
 
     public boolean isEmpty() {
         return fsItems.isEmpty();
+    }
+
+    public void walk(final FsDirVisitor fsDirVisitor, final FsFileVisitor fsFileVisitor) {
+        new FsStructureWalker(getFsItems(), fsDirVisitor, fsFileVisitor).walk();
     }
 
     @Override
