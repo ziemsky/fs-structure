@@ -1,5 +1,6 @@
 package com.ziemsky.fsstructure.test.unit
 
+import com.ziemsky.fsstructure.AbstractFsItem
 import com.ziemsky.fsstructure.FsDir
 import com.ziemsky.fsstructure.FsItem
 import spock.lang.Specification
@@ -8,7 +9,7 @@ import static com.ziemsky.fsstructure.test.util.TestDataProvider.newFsItemName
 
 class FsDirTest extends Specification {
 
-    def "constructor   initialises all fields"() {
+    def "constructor initialises all fields"() {
 
         given:
 
@@ -21,8 +22,8 @@ class FsDirTest extends Specification {
 
         then:
             with(actualFsDir) {
-                name == expectedDirName
-                fsItems == [fsItemA, fsItemB]
+                name() == expectedDirName
+                children() == [fsItemA, fsItemB]
             }
     }
 
@@ -35,6 +36,6 @@ class FsDirTest extends Specification {
             final FsDir actualFsDir = new FsDir(expectedDirName)
 
         then:
-            actualFsDir.toString() == "FsDir{name='${actualFsDir.name}'}"
+            actualFsDir.toString() == "FsDir{name='${actualFsDir.name()}'}"
     }
 }

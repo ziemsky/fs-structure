@@ -148,17 +148,17 @@ public class FsStructure {
 
             sb
                 .append(IntStream.range(0, level).mapToObj(value -> INDENT).collect(joining("")))
-                .append(fsItem.getName());
+                .append(fsItem.name());
 
             if (fsItem instanceof FsFile) {
                 sb
                     .append(": ")
-                    .append(toString(((FsFile) fsItem).getContent()));
+                    .append(toString(((FsFile) fsItem).content()));
 
             } else if (fsItem instanceof FsDir) {
                 sb.append("/");
 
-                buildString(sb, ((FsDir)fsItem).getFsItems(), level + 1);
+                buildString(sb, ((FsDir)fsItem).children(), level + 1);
             }
         });
 

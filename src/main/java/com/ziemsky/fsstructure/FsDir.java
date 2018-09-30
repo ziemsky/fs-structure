@@ -7,29 +7,34 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
-public class FsDir implements FsItem {
+public class FsDir extends AbstractFsItem {
 
-    private final String name;
-    private final List<FsItem> fsItems = new ArrayList<>();
+    private final List<FsItem> children = new ArrayList<>();
 
-    public FsDir(final String name, final FsItem... fsItems) {
-        this.name = name;
-        this.fsItems.addAll(Optional.ofNullable(fsItems).map(Arrays::asList).orElse(emptyList()));
+    public FsDir(final String name, final FsItem... children) {
+        this(name, emptyList(), children);
     }
 
-    public String getName() {
-        return name;
+    public FsDir(final String name, final List<FsDir> parents, final FsItem... children) {
+        super(name, parents);
+
+        this.children.addAll(
+            Optional.ofNullable(children).map(Arrays::asList).orElse(emptyList())
+                .stream()
+                .peek(fsItem -> fsItem.addParent(this))
+                .collect(toList())
+        );
     }
 
-    public List<FsItem> getFsItems() {
-        return unmodifiableList(fsItems);
+    public List<FsItem> children() {
+        return unmodifiableList(children);
     }
 
     @Override public String toString() {
         return "FsDir{" +
-
-            "name='" + name + '\'' +
+            "name='" + name() + '\'' +
             '}';
     }
 }

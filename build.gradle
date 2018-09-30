@@ -58,6 +58,7 @@ idea.module.testSourceDirs.containsAll(sourceSets.functional.allJava.srcDirs)
 
 dependencies {
     compile("commons-io:commons-io:2.5")
+    compile("org.apache.commons:commons-lang3:3.8.1")
 
     testUtilsCompile("org.codehaus.groovy:groovy-all:${groovyVersion}")
 

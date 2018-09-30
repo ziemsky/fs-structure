@@ -1,26 +1,28 @@
 package com.ziemsky.fsstructure;
 
-public class FsFile implements FsItem {
+import java.util.Collections;
+import java.util.List;
 
-    private final String name;
+public class FsFile extends AbstractFsItem {
+
     private final byte[] content;
 
     public FsFile(final String name, final byte[] content) {
-        this.name = name;
+        this(name, Collections.emptyList(), content);
+    }
+
+    public FsFile(final String name, final List<FsDir> parents, final byte[] content) {
+        super(name, parents);
         this.content = content;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public byte[] getContent() {
+    public byte[] content() {
         return content;
     }
 
     @Override public String toString() {
         return "FsFile{" +
-            "name='" + name + '\'' +
+            "name='" + name() + '\'' +
             '}';
     }
 }

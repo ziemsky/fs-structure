@@ -1,8 +1,18 @@
 package com.ziemsky.fsstructure;
 
+import java.util.List;
+
 public interface FsItem {
 
-    String getName();
+    String name();
+
+    List<FsDir> parents();
+
+    FsDir parent();
+
+    boolean isNested();
+
+    void addParent(FsDir parent);
 
     static int compare(FsItem left, FsItem right) {
         if (left instanceof FsDir && !(right instanceof FsDir)) {
@@ -13,6 +23,6 @@ public interface FsItem {
             return 1;
         }
 
-        return left.getName().compareTo(right.getName());
+        return left.name().compareTo(right.name());
     }
 }

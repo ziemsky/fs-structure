@@ -20,7 +20,7 @@ public class FsDirWriter implements FsItemWriter<FsDir> {
 
     public void saveIn(final Path parentDirectory) {
 
-        final Path thisDir = getPath(parentDirectory, fsDir.getName());
+        final Path thisDir = getPath(parentDirectory, fsDir.name());
 
         try {
             fsTools.createDirectories(thisDir);
@@ -30,7 +30,7 @@ public class FsDirWriter implements FsItemWriter<FsDir> {
         }
 
         try {
-            fsStructureWriter.write(fsDir.getFsItems(), thisDir);
+            fsStructureWriter.write(fsDir.children(), thisDir);
         } catch (final Exception e) {
             throw new RuntimeException("Failed to write content of " + thisDir, e);
         }

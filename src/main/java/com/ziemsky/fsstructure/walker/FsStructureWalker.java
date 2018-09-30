@@ -21,17 +21,17 @@ public class FsStructureWalker {
     }
 
     public void walk() {
-        walk(fsItems, null);
+        walk(fsItems);
     }
 
-    private void walk(final List<FsItem> fsItems, final FsDir parent) {
+    private void walk(final List<FsItem> fsItems) {
         fsItems.forEach(fsItem -> {
-            visitor(fsItem).visit(fsItem, parent);
+            visitor(fsItem).visit(fsItem);
 
             if (fsItem instanceof FsDir) {
                 final FsDir fsDir = (FsDir) fsItem;
 
-                walk(fsDir.getFsItems(), fsDir);
+                walk(fsDir.children());
             }
         });
     }

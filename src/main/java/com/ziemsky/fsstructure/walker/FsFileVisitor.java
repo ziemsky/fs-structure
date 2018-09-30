@@ -6,5 +6,5 @@ import com.ziemsky.fsstructure.FsFile;
 @FunctionalInterface
 public interface FsFileVisitor extends FsItemVisitor<FsFile> {
 
-    void visit(FsFile fsFile, FsDir parent);
+    void visit(FsFile fsFile);
 }

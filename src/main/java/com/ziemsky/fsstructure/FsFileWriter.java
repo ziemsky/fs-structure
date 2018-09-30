@@ -17,7 +17,7 @@ public class FsFileWriter implements FsItemWriter<FsFile> {
 
     public void saveIn(final Path parentDir) {
 
-        final Path targetFilePath = getPath(parentDir, fsFile.getName());
+        final Path targetFilePath = getPath(parentDir, fsFile.name());
 
         try {
             fsTools.createFile(targetFilePath);
@@ -26,7 +26,7 @@ public class FsFileWriter implements FsItemWriter<FsFile> {
         }
 
         try {
-            fsTools.write(targetFilePath, fsFile.getContent());
+            fsTools.write(targetFilePath, fsFile.content());
         } catch (final Exception e) {
             throw new RuntimeException("Failed to write to file " + targetFilePath, e);
         }

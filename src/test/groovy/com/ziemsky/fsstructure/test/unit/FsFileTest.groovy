@@ -19,8 +19,8 @@ class FsFileTest extends Specification {
 
         then:
             with(actualFsFile) {
-                name == expectedFileName
-                content == expectedFileContent
+                name() == expectedFileName
+                content() == expectedFileContent
             }
     }
 
@@ -34,6 +34,6 @@ class FsFileTest extends Specification {
             final FsFile actualFsFile = new FsFile(expectedFileName, expectedFileContent)
 
         then:
-            actualFsFile.toString() == "FsFile{name='${actualFsFile.name}'}"
+            actualFsFile.toString() == "FsFile{name='${actualFsFile.name()}'}"
     }
 }
